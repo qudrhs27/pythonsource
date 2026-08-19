@@ -1,4 +1,5 @@
 # 영어타자 프로그램
+# 기록을 데이터베이스 저장
 
 # word.txt 읽어서
 # 섞는다 random.shuffle()
@@ -19,12 +20,12 @@
 
 import random, time
 
-with open("./ch1/data/word.txt", "r", encoding="utf-8") as f:
+with open("./data/word.txt", "r", encoding="utf-8") as f:
     words = f.readlines()
 
 start = time.time()
 problem_cnt = 0
-correct_cnt = 0
+corr_cnt = 0
 while True:
     problem_cnt += 1
     random.shuffle(words)
@@ -36,7 +37,7 @@ while True:
     if word == answer:
         print("정답!!")
         print()
-        correct_cnt += 1
+        corr_cnt += 1
     else:
         print("오답!!")
         print()
@@ -47,15 +48,33 @@ while True:
 end = time.time()
 et = end - start
 et = format(et, ".3f")
-print(f"게임시간 : {et}초, 정답개수 : {correct_cnt}개")
-if correct_cnt >= 3:
+print(f"게임시간 : {et}초, 정답개수 : {corr_cnt}개")
+if corr_cnt >= 3:
     print("합격")
 else:
     print("불합격")
     
-    
 
 
+# db
+import sqlite3
+conn = sqlite3.connect("../db/test.db",isolation_level=None)
+cursor = conn.cursor()
+
+sql = """create table if not exists records(corr_cnt integer,
+record text,
+regdate text
+)
+"""
+
+cursor.execute(sql)
+
+# insert 작업(기록 삽입)
+from datetime import datetime
+now = datetime.now()
+nowDateTime = now.strftime("%Y-%m-%d %H:%M:%S")
+sql = "insert into records(corr_cnt,record,regdate) values(?,?,?)"
+cursor.execute(sql,(corr_cnt,et,nowDateTime))
 
 
 
