@@ -2,6 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,python,venv,visualstudiocode
 
 test.db
+naver_session.json
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
